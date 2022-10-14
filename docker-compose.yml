@@ -1,0 +1,9 @@
+services:
+  jupyter:
+    build: ./
+    environment:
+      - CHOWN_HOME=yes
+    volumes:
+      - ./source:/home/jovyan/source
+    ports:
+      - "8888:8888"
