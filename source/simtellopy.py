@@ -75,6 +75,9 @@ class Tello():
     def _pushState(self):
         self.history.append(self.position)
         
+    def _popState(self):
+        self.history.pop()
+        
     def _move(self, direction, distance):
         x, y, z, angle = self.position
         
@@ -103,6 +106,7 @@ class Tello():
             newAngle -= 360
             
         self.position = (x, y, z, newAngle)
+        self._popState()
         self._pushState()
         
     def _flip(self, direction: str):

@@ -12,7 +12,7 @@ layout = {
         'aspectmode': 'data',
         'camera_eye': {
             'x': -0.2,
-            'y': -1.80,
+            'y': -1.8,
             'z': 0.5,
         },
         'xaxis': {
@@ -27,6 +27,8 @@ layout = {
     },
 }
 
+colorscale = 'hsv'
+
 def simulate(drone):
     width, length = drone.ground
     
@@ -40,8 +42,7 @@ def simulate(drone):
         colorscale = 'algae',
         cmin = 0,
         cmax = 1,
-        intensity = [0.8, 0.2, 0.2, 0.8],
-        opacity = 0.80,
+        intensity = [0.3, 0.1, 0.1, 0.3],
         showscale = False,
         hoverinfo = 'skip',
     )
@@ -51,24 +52,49 @@ def simulate(drone):
     zs = [state[2] for state in drone.history]
     angles = [state[3] for state in drone.history]
     
-    trace1 = go.Scatter3d(
-        showlegend=False,
-        x=xs,  # <-- Put your data instead
-        y=ys,  # <-- Put your data instead
-        z=zs,  # <-- Put your data instead
-        mode='lines+markers',
-        marker={
+    path = go.Scatter3d(
+        x = xs,
+        y = ys,
+        z = zs,
+        customdata = angles,
+        mode = 'lines+markers',
+        marker = {
             'size': 10,
-            'color': 'pink'
+            'colorscale': colorscale,
+            'cmin': 0,
+            'cmax':  360,
+            'color': angles,
+            'line': {
+                'width': 2,
+                'color': 'black',
+            },
         },
+        line = {
+            'color': 'black',
+        },
+        opacity = 0.5,
+        hovertemplate = 'x: %{x}<br>y: %{y}<br>z: %{z}<br>a: %{customdata}<extra></extra>',
+    )
     
+    scale = go.Mesh3d(
+        x = [0],
+        y = [0],
+        z = [0],
+        i = [0],
+        j = [0],
+        k = [0],
+        colorscale = colorscale,
+        cmin = 0,
+        cmax = 360,
+        intensity = [0],
+        hoverinfo = 'skip',
     )
 
-    data = [trace1, ground]
+    data = [ground, path, scale]
 
     figure = go.Figure(
-        data=data,
-        layout=layout,
+        data = data,
+        layout = layout,
     )
 
     figure.show()
