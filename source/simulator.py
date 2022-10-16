@@ -1,10 +1,51 @@
 import plotly.graph_objs as go
 
-x=[0, 0, 50, 50, 50]
-y=[0, 0, 0, 50, 50]
-z=[0, 81, 81, 81, 0]
+layout = {
+    'height': 400,
+    'margin': {
+        'l': 10,
+        'r': 10,
+        'b': 10,
+        't': 20,
+    },
+    'scene': {
+        'aspectmode': 'data',
+        'camera_eye': {
+            'x': -0.2,
+            'y': -1.80,
+            'z': 0.5,
+        },
+        'xaxis': {
+            'visible': False,
+        },
+        'yaxis': {
+            'visible': False,
+        },
+        'zaxis': {
+            'visible': False,
+        },
+    },
+}
 
 def simulate(drone):
+    width, length = drone.ground
+    
+    ground = go.Mesh3d(
+        x = [0, 0, width, width],
+        y = [0, length, length, 0],
+        z = [0, 0, 0, 0],
+        i = [0, 0],
+        j = [1, 2],
+        k = [2, 3],
+        colorscale = 'algae',
+        cmin = 0,
+        cmax = 1,
+        intensity = [0.8, 0.2, 0.2, 0.8],
+        opacity = 0.80,
+        showscale = False,
+        hoverinfo = 'skip',
+    )
+    
     xs = [state[0] for state in drone.history]
     ys = [state[1] for state in drone.history]
     zs = [state[2] for state in drone.history]
@@ -18,42 +59,16 @@ def simulate(drone):
         mode='lines+markers',
         marker={
             'size': 10,
-            'opacity': 0.8,
             'color': 'pink'
         },
     
     )
 
-    trace2 = go.Mesh3d(
-        # 8 vertices of a cube
-            x=[-100, -100, 100, 100],
-            y=[-100, 100, 100, -100],
-            z=[0, 0, 0, 0],
-            colorscale='algae',
-            # Intensity of each vertex, which will be interpolated and color-coded
-            intensity = [1, 0, 0, 1],
-            # i, j and k give the vertices of triangles
-            i = [0, 0],
-            j = [1, 2],
-            k = [2, 3],
-            hoverinfo='skip',
-            opacity=0.80
+    data = [trace1, ground]
+
+    figure = go.Figure(
+        data=data,
+        layout=layout,
     )
 
-    # Configure the layout.
-    layout = {}
-
-    data = [trace1, trace2]
-
-    plot_figure = go.Figure(data=data, layout=layout)
-    plot_figure.update_layout(
-        scene = dict(
-            xaxis = dict(visible=False),
-            yaxis = dict(visible=False),
-            zaxis = dict(visible=False),
-            camera_eye = {"x": 0, "y": -1, "z": 0.5},
-            )
-        )
-
-    # Render the plot.
-    plot_figure.show()
+    figure.show()

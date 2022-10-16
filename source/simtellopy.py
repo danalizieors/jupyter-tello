@@ -3,9 +3,10 @@ import math
 from simulator import simulate
 
 class Tello():
-    def __init__(self, position = (0, 0)):
+    def __init__(self, position = (0, 0), ground=(200, 400)):
         x, y = position
         self.position = (x, y, 0, 0)
+        self.ground = ground
         self.history = [self.position]
         
     def connect(self):
