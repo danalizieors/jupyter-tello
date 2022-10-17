@@ -67,7 +67,7 @@ class Tello():
         self._flip('forward')
 
     def flip_back(self):
-        self._flip('backward')
+        self._flip('back')
         
     def simulate(self):
         simulate(self)
