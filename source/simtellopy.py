@@ -1,6 +1,7 @@
 import math 
 
 from simulator import simulate
+from utils import toRadians
 
 class Tello():
     def __init__(self, position = (0, 0), ground=(200, 400)):
@@ -8,6 +9,7 @@ class Tello():
         self.position = (x, y, 0, 0)
         self.ground = ground
         self.history = [self.position]
+        self.photos = []
         
     def connect(self):
         print('Drone connected!')
@@ -69,6 +71,9 @@ class Tello():
     def flip_back(self):
         self._flip('back')
         
+    def take_photo(self):
+        self.photos.append(self.position)
+        
     def simulate(self):
         simulate(self)
         
@@ -81,7 +86,7 @@ class Tello():
     def _move(self, direction, distance):
         x, y, z, angle = self.position
         
-        radians = 2 * math.pi * (angle + direction) / 360 
+        radians = toRadians(angle + direction)
         dx = math.sin(radians) * distance
         dy = math.cos(radians) * distance
         
