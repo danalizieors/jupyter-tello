@@ -44,10 +44,10 @@ def simulate(drone):
         i = [0, 0],
         j = [1, 2],
         k = [2, 3],
-        colorscale = 'algae',
+        colorscale = 'solar',
         cmin = 0,
         cmax = 1,
-        intensity = [0.3, 0.1, 0.1, 0.3],
+        intensity = [0.6, 0.8, 0.8, 0.6],
         showscale = False,
         hoverinfo = 'skip',
     )
