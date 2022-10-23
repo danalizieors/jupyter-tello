@@ -1,12 +1,12 @@
 import math 
 
-from simulator import simulate
-from utils import toRadians
+from .simulator import simulate
+from .utils import toRadians
 
 class Tello():
-    def __init__(self, position = (0, 0), ground=(200, 400)):
-        x, y = position
-        self.position = (x, y, 0, 0)
+    def __init__(self, name, position = (0, 0, 180), ground=(200, 400)):
+        x, y, angle = position
+        self.position = (x, y, 0, angle)
         self.ground = ground
         self.history = [self.position]
         self.photos = []

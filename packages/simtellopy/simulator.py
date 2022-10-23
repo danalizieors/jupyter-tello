@@ -1,7 +1,7 @@
 import math 
 import plotly.graph_objs as go
 
-from utils import toRadians
+from .utils import toRadians
 
 layout = {
     'height': 400,
@@ -31,6 +31,7 @@ layout = {
 }
 
 colorscale = 'hsv'
+drone_length = 10
 photo_angle = 12
 photo_range = 100
 
@@ -82,6 +83,27 @@ def simulate(drone):
         hovertemplate = 'x: %{x}<br>y: %{y}<br>z: %{z}<br>a: %{customdata}<extra></extra>',
     )
     
+    xs_drone = sum([[state[0], state[0] + math.sin(toRadians(state[3])) * drone_length, None] for state in drone.history], [])
+    ys_drone = sum([[state[1], state[1] + math.cos(toRadians(state[3])) * drone_length, None] for state in drone.history], [])
+    zs_drone = sum([[state[2], state[2], None] for state in drone.history], [])
+    angles_drone= sum([[state[3], state[3], state[3]] for state in drone.history], [])
+    
+    drone_lines = go.Scatter3d(
+        x = xs_drone,
+        y = ys_drone,
+        z = zs_drone,
+        mode = 'lines',
+        line = {
+            'width': 8,
+            'colorscale': colorscale,
+            'cmin': 0,
+            'cmax':  360,
+            'color': angles_drone,
+        },
+        showlegend = False,
+        hoverinfo = 'skip',
+    )
+    
     scale = go.Mesh3d(
         x = [0],
         y = [0],
@@ -117,7 +139,7 @@ def simulate(drone):
         hovertemplate = 'x: %{x}<br>y: %{y}<br>z: %{z}<extra></extra>',
     )
 
-    data = [ground, path, scale, photos]
+    data = [ground, path, drone_lines, scale, photos]
 
     figure = go.Figure(
         data = data,
