@@ -4,7 +4,7 @@ from .simulator import simulate
 from .utils import toRadians
 
 class Tello():
-    def __init__(self, name, position = (0, 0, 180), ground=(200, 400)):
+    def __init__(self, name, position = (30, 25, 180), ground=(260, 260)):
         x, y, angle = position
         self.position = (x, y, 0, angle)
         self.ground = ground
