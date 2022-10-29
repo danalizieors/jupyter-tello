@@ -96,7 +96,7 @@ class Tello():
     def _move_z(self, distance: int):
         x, y, z, angle = self.position
         
-        self.position = (x, y, z + distance, angle)
+        self.position = (x, y, max(30, z + distance), angle)
         self._pushState()
         
     def _rotate(self, direction):
